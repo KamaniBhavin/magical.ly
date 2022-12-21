@@ -10,18 +10,21 @@ const MagicalToolbar: FC<{
     setPromptParams: (type: MagicalTextOption, mood: string, length: string) => any
 }> = ({loading, error, setPromptParams}) => {
     const [selectedMood, setSelectedMood] = useState("Neutral")
-    const [selectedLength, setSelectedLength] = useState("short")
+    const [selectedLength, setSelectedLength] = useState("Short & Sweet")
 
 
     return <div className="magical-toolbar">
         <div className="magical-toolbar__section">
             {
                 moods.map((mood) => (
-                    <button
-                        key={mood.value}
-                        className={`magical-toolbar__option-btn ${mood.value == selectedMood ? "magical-toolbar__option-btn--selected" : ""}`}
-                        onClick={() => setSelectedMood(mood.value)}>
-                        {mood.emoji}</button>
+                    <div key={mood.value} className="magical-toolbar__option-container">
+                        <span className="magical-toolbar__option-btn--tooltip">{mood.value}</span>
+                        <button
+                            className={`magical-toolbar__option-btn ${mood.value == selectedMood ? "magical-toolbar__option-btn--selected" : ""}`}
+                            onClick={() => setSelectedMood(mood.value)}>
+                            {mood.emoji}</button>
+                    </div>
+
                 ))
             }
         </div>
@@ -29,25 +32,29 @@ const MagicalToolbar: FC<{
         <div className="magical-toolbar__section">
             {
                 contentLengths.map((length) => (
-                    <button
-                        key={length.value}
-                        className={`magical-toolbar__option-btn ${length.value == selectedLength ? "magical-toolbar__option-btn--selected" : ""}`}
-                        onClick={() => setSelectedLength(length.value)}>
-                        {length.emoji}
-                    </button>
+                    <div key={length.value} className="magical-toolbar__option-container">
+                        <span className="magical-toolbar__option-btn--tooltip">{length.value}</span>
+                        <button
+                            className={`magical-toolbar__option-btn ${length.value == selectedLength ? "magical-toolbar__option-btn--selected" : ""}`}
+                            onClick={() => setSelectedLength(length.value)}>
+                            {length.emoji}
+                        </button>
+                    </div>
                 ))
             }
         </div>
 
         <div className="magical-toolbar__section magical-toolbar__write-section ">
             <button
+                disabled={loading}
                 onClick={() => setPromptParams("write", selectedMood, selectedLength)}
-                className="magical-toolbar__option-btn magical-toolbar__write-btn">
+                className={`magical-toolbar__option-btn magical-toolbar__primary-btn ${loading ? "magical-toolbar__primary-btn--disabled" : ""}`}>
                 Write
             </button>
             <button
+                disabled={loading}
                 onClick={() => setPromptParams("rephrase", selectedMood, selectedLength)}
-                className="magical-toolbar__option-btn magical-toolbar__rephrase-btn">
+                className={`magical-toolbar__option-btn magical-toolbar__secondary-btn ${loading ? "magical-toolbar__secondary-btn--disabled" : ""}`}>
                 Rephrase
             </button>
         </div>

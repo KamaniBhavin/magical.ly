@@ -1,21 +1,21 @@
 
 export const GPTCompletionToken = "[DONE]"
 
+export const contentLengths = [
+    {emoji: "🤏", value: "Short & Sweet"},
+    {emoji: "👌", value: "Medium"},
+    {emoji: "💪", value: "Long"}
+]
 export const lengthToToken: { [k: string]: number} = {
-    "short": 64,
-    "medium": 128,
-    "long": 160
+    "Short & Sweet": 64,
+    "Medium": 96,
+    "Long": 160
 }
 
 export const moods = [
-    {emoji: "😍", value: "Happy"},
+    {emoji: "😀", value: "Grinning"},
     {emoji: "🙏", value: "Thankful"},
-    {emoji: "😀", value: "Neutral"},
-    {emoji: "🙌", value: "Nicely done"}
-]
-
-export const contentLengths = [
-    {emoji: "🤏", value: "short"},
-    {emoji: "👌", value: "medium"},
-    {emoji: "💪", value: "long"}
+    {emoji: "😑", value: "Neutral"},
+    {emoji: "🙌", value: "Nicely done"},
+    {emoji: "🥺", value: "Pleading"}
 ]
