@@ -44,26 +44,30 @@ const MagicalToolbar: FC<{
             }
         </div>
 
-        <div className="magical-toolbar__section magical-toolbar__write-section ">
-            <button
-                disabled={loading}
-                onClick={() => setPromptParams("write", selectedMood, selectedLength)}
-                className={`magical-toolbar__option-btn magical-toolbar__primary-btn ${loading ? "magical-toolbar__primary-btn--disabled" : ""}`}>
-                Write
-            </button>
-            <button
-                disabled={loading}
-                onClick={() => setPromptParams("rephrase", selectedMood, selectedLength)}
-                className={`magical-toolbar__option-btn magical-toolbar__secondary-btn ${loading ? "magical-toolbar__secondary-btn--disabled" : ""}`}>
-                Rephrase
-            </button>
+        <div className="magical-toolbar__section magical-toolbar__action-section ">
+            {error.length
+                ? <div className="magical-toolbar__option-container">
+                    <span className="magical-toolbar__option-btn--tooltip">{error.substring(0, 32).concat("...")}</span>
+                    <button className="magical-toolbar__option-btn magical-toolbar__error-btn">Error</button>
+                </div>
+                : <>
+                    <button
+                        disabled={loading}
+                        onClick={() => setPromptParams("write", selectedMood, selectedLength)}
+                        className={`magical-toolbar__option-btn magical-toolbar__primary-btn ${loading ? "magical-toolbar__primary-btn--disabled" : ""}`}>
+                        Write
+                    </button>
+                    <button
+                        disabled={loading}
+                        onClick={() => setPromptParams("rephrase", selectedMood, selectedLength)}
+                        className={`magical-toolbar__option-btn magical-toolbar__secondary-btn ${loading ? "magical-toolbar__secondary-btn--disabled" : ""}`}>
+                        Rephrase
+                    </button>
+                </>}
         </div>
 
         <div className="magical-toolbar__section">
             {loading ? <Loading/> : <></>}
-            {error.length
-                ? <button className="magical-toolbar__option-btn magical-toolbar__error-btn">Error</button>
-                : <></>}
         </div>
 
     </div>

@@ -30,6 +30,8 @@
     padding: 0.5em;
     top: -1.5em;
     z-index: 999;
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
 }
 
 .magical-toolbar__option-container {
@@ -48,7 +50,7 @@
     background-color: #9c67ff;
 }
 
-.magical-toolbar__write-section {
+.magical-toolbar__action-section {
     margin: 0 auto;
 }
 
