@@ -19,7 +19,7 @@ function createGPTRequestBody(type: MagicalTextOption, prompt: string, mood: str
         model: "text-davinci-003",
         prompt: promptForGPT,
         stream: true,
-        max_tokens: lengthToToken[length]
+        max_tokens: promptForGPT.length + lengthToToken[length]
     }
 }
 
