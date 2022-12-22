@@ -4,7 +4,8 @@
   "description": "A simple chrome extension on OpenAI GPT3 for the lazy ones like me.",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --watch --config webpack.development.js"
+    "dev": "webpack --watch --config webpack.development.js",
+    "zip": "webpack --config webpack.distribution.js"
   },
   "keywords": [
     "Open",
@@ -27,7 +28,8 @@
     "typescript": "^4.9.4",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1",
-    "webpack-merge": "^5.8.0"
+    "webpack-merge": "^5.8.0",
+    "zip-webpack-plugin": "^4.0.1"
   },
   "dependencies": {
     "@microsoft/fetch-event-source": "^2.0.1",
