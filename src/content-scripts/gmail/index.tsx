@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "../../styles.css"
 import Magically from "../../components/Magically";
 
 function getClosestTextTarget(element: Element, className: string): Element | undefined {

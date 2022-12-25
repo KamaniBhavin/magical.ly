@@ -1,5 +1,5 @@
 import React, {FC, useState} from "react";
-import "../styles.css"
+import "./MagicallyToolbar.css"
 import Loading from "./Loading";
 import {contentLengths, moods} from "../utils/constants";
 import {MagicalTextOption} from "../types/Magically";

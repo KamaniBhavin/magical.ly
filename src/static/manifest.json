@@ -3,14 +3,13 @@
   "name": "magical.ly",
   "version": "1.0.0",
   "description": "A simple chrome extension on OpenAI GPT3 for the lazy ones like me.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhIM9QmyZWxdQWFshBIHaL3TIc5EENv9FHxF5JG/qq8+1WCNC/xAGia2g5V6PVUBqrVmCO5C8SxY0StgU3/rbkrekQ8hxKwnMRnFC5Zir1p90P+pkWcMw/YGD8abLuHAdBPjSHPojgU8dozWWDM8D3s2gZImPEBzEfVxOISNbAzkgqj07sOp6qBnPJBcv8pAGtdsgW8NLvYVa4TA1bqPQYC66lPq+ujyvFHppQ1PLnI1wzoPO+MC0IpE8TbmLmSzaMFy+/kvN30d3HH0uSYzXZc/utuvaUAk8tUXz4GkmVt54+tRutDmsJC+DsdNRP3x4f3dSndBWdgXf2txWnwTqEwIDAQAB",
   "icons": {
     "16": "icons/icon-16.png",
     "32": "icons/icon-32.png",
     "48": "icons/icon-48.png",
     "128": "icons/icon-128.png",
-    "256": "icons/icon-256.png",
-    "512": "icons/icon-512.png",
-    "1024": "icons/icon-1024.png"
+    "256": "icons/icon-256.png"
   },
   "action": {
     "default_icon": {
@@ -18,18 +17,24 @@
       "32": "icons/icon-32.png",
       "48": "icons/icon-48.png",
       "128": "icons/icon-128.png",
-      "256": "icons/icon-256.png",
-      "512": "icons/icon-512.png",
-      "1024": "icons/icon-1024.png"
+      "256": "icons/icon-256.png"
     },
     "default_title": "magical.ly",
     "default_popup": "popup.html"
   },
   "content_scripts": [
     {
-      "matches": ["https://mail.google.com/*"],
-      "js": ["gmail.js"],
+      "matches": [
+        "https://mail.google.com/*"
+      ],
+      "js": [
+        "gmail.js"
+      ],
       "all_frames": true
     }
-  ]
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  }
 }
