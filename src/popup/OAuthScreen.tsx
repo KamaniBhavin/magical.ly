@@ -26,7 +26,7 @@ const OAuthScreen: FC<{ dispatch: Dispatch<AuthStateAction> }> = ({dispatch}) =>
         <img className="oauth__logo" src="./icons/icon-128.png"/>
         <div className="oauth__header">
             <div className="oauth__greeting--title">Welcome back!</div>
-            <div className="oauth__greeting--sub-title">A Magical Experience Awaits...</div>
+            <div className="oauth__greeting--sub-title">A magical experience awaits...</div>
         </div>
         {loading
             ? <Loading color={"#ffffff"}/>
