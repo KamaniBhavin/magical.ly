@@ -1,0 +1,19 @@
+.oauth__login-btn {
+    background-color: #f6f4fa;
+    height: 3rem;
+    width: 75%;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.oauth__provider-icon {
+    margin: 0 0.5rem;
+    font-size: 2rem;
+    align-self: flex-end;
+}
+
+.oauth__provider-title {
+    font-size: 1rem;
+}

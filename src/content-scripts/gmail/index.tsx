@@ -48,7 +48,7 @@ const observer = new MutationObserver((mutations, _) => {
             magicalRoot.id = magicalRootId;
             target.prepend(magicalRoot);
 
-            textTarget.textContent = "Write an email..."
+            textTarget.textContent = "Write an email "
 
             const root = ReactDOM.createRoot(document.getElementById(magicalRootId)!)
             root.render(

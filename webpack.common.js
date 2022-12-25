@@ -8,7 +8,8 @@ module.exports = () => {
     return {
         entry: {
             popup: path.resolve("src/popup/index.tsx"),
-            gmail: path.resolve("src/content-scripts/gmail/index.tsx")
+            gmail: path.resolve("src/content-scripts/gmail/index.tsx"),
+            background: path.resolve("src/service-workers/background.ts")
         },
         resolve: {
             extensions: [".ts", ".tsx", ".js", ".jsx"]
@@ -46,7 +47,7 @@ module.exports = () => {
         optimization: {
             splitChunks: {
                 chunks(chunk) {
-                    return chunk.name !== "gmail";
+                    return chunk.name !== "background" && chunk.name !== "gmail";
                 }
             }
         }

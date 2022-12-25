@@ -6,11 +6,18 @@ export const contentLengths = [
     {emoji: "👌", value: "Medium"},
     {emoji: "💪", value: "Long"}
 ]
-export const lengthToToken: { [k: string]: number} = {
+export const lengthToToken: { [k: string]: number } = {
     "Short & Sweet": 64,
     "Medium": 96,
     "Long": 160
 }
+
+export const lengthToCredit: { [k: string]: number } = {
+    "Short & Sweet": 1,
+    "Medium": 3,
+    "Long": 5
+}
+
 
 export const moods = [
     {emoji: "😀", value: "Grinning"},

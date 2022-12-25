@@ -1,0 +1,52 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+.oauth {
+    display: flex;
+    flex-direction: column;
+    color: white;
+    text-align: center;
+    align-items: center;
+}
+
+.oauth__header {
+    margin: 2rem 0;
+}
+
+.oauth__logo {
+    margin: 2rem auto 0;
+    border-radius: 1rem;
+}
+
+.oauth__greeting--title {
+    font-size: 2.5rem;
+    font-weight: 500;
+}
+
+.oauth__greeting--sub-title {
+    font-size: 1rem;
+    color: #c2c2c2;
+}
+
+.home {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    color: white;
+}
+
+.profile__img {
+    border-radius: 50%;
+}
+
+.profile__text--lrg {
+    font-size: 2rem;
+}

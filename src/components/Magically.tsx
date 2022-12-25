@@ -1,7 +1,7 @@
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import MagicalToolbar from "./MagicalToolbar";
 import {EventSourceMessage} from "@microsoft/fetch-event-source";
-import {GPTCompletionToken, lengthToToken} from "../utils/constants";
+import {GPTCompletionToken, lengthToCredit, lengthToToken} from "../utils/constants";
 import {GPTRequest, GPTResponse} from "../types/GPT";
 import useFetchEventSource from "../hooks/useFetchEventSource";
 import {MagicalTextOption} from "../types/Magically";
@@ -27,19 +27,31 @@ const Magically: FC<{target: Element}> = ({target}) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>("");
 
+    useEffect(() => {
+        (async () => {
+            const obj = await chrome.storage.sync.get(["accessToken", "credits"]);
+            if (!obj["accessToken"]) {
+                setError("Login for a magical experience.")
+            } else if (!obj["credits"] || obj["credits"] <= 0) {
+                setError("Not Enough Credits!")
+            }
+        })()
+    }, [])
+
     async function setPromptParams(type: MagicalTextOption, mood: string, length: string) {
         setLoading(true)
 
-        if (target.textContent == null ) {
+        if (target.textContent == null) {
             setError("Please add prompt for magically to work with!")
         } else {
-            const endpoint =  "/completions"
+            const endpoint = "/completions"
             const body = createGPTRequestBody(type, target.textContent, mood, length)
 
             function onOpen() {
                 target.textContent = ""
                 setLoading(false)
             }
+
             function onMessage(event: EventSourceMessage) {
                 const lineBreak = document.createElement("br")
 
@@ -58,12 +70,18 @@ const Magically: FC<{target: Element}> = ({target}) => {
                 }
             }
 
+            async function onClose() {
+                const current = await chrome.storage.sync.get("credits")
+                const count = Number(current["credits"])
+                await chrome.storage.sync.set({credits: count - lengthToCredit[length]})
+            }
+
             function onError(error: any) {
                 setLoading(false)
                 setError(error)
             }
 
-            await useFetchEventSource<GPTRequest>(endpoint, body, onOpen, onMessage, onError)
+            await useFetchEventSource<GPTRequest>(endpoint, body, onOpen, onMessage, onClose, onError)
         }
     }
 

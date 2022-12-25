@@ -1,0 +1,11 @@
+.popup {
+    width: 25rem;
+    height: 35rem;
+    background-color: #353535;
+}
+
+.popup__background-overlay--container {
+    width: 80%;
+    height: 100%;
+    margin: 0 auto;
+}

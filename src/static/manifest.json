@@ -22,6 +22,10 @@
     "default_title": "magical.ly",
     "default_popup": "popup.html"
   },
+  "permissions": [
+    "identity",
+    "storage"
+  ],
   "content_scripts": [
     {
       "matches": [

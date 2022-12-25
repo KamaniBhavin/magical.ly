@@ -4,7 +4,14 @@ import {fetchEventSource} from "@microsoft/fetch-event-source";
 const openAPIBaseUrl = "https://api.openai.com/v1"
 const GPTToken = "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"
 
-async function useFetchEventSource<T>(endpoint: string, body:T, onOpen: Function, onMessage: Function, onError: Function) {
+async function useFetchEventSource<T>(
+    endpoint: string,
+    body: T,
+    onOpen: Function,
+    onMessage: Function,
+    onClose: Function,
+    onError: Function
+) {
     await fetchEventSource(`${openAPIBaseUrl}${endpoint}`,
         {
             method: "POST",
@@ -26,6 +33,7 @@ async function useFetchEventSource<T>(endpoint: string, body:T, onOpen: Function
             },
             onclose() {
                 console.info("Successfully closed connection.")
+                onClose()
             },
             onerror(error) {
                 console.error(error)
