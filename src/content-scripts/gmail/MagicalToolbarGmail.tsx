@@ -1,10 +1,10 @@
 import React, {FC, useState} from "react";
-import "./MagicallyToolbar.css"
-import Loading from "./Loading";
-import {contentLengths, moods} from "../utils/constants";
-import {MagicalTextOption} from "../types/Magically";
+import "./magically-toolbar-gmail.css"
+import Loading from "../../components/Loading";
+import {contentLengths, moods} from "../../utils/constants";
+import {MagicalTextOption} from "../../types/Magically";
 
-const MagicalToolbar: FC<{
+const MagicalToolbarGmail: FC<{
     loading: boolean,
     error: string,
     setPromptParams: (type: MagicalTextOption, mood: string, length: string) => any
@@ -73,4 +73,4 @@ const MagicalToolbar: FC<{
     </div>
 }
 
-export default MagicalToolbar
+export default MagicalToolbarGmail

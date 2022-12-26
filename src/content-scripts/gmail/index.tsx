@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Magically from "../../components/Magically";
+import MagicallyGmail from "./MagicallyGmail";
 
 function getClosestTextTarget(element: Element, className: string): Element | undefined {
     const targets = Array.from(element.children).map((c) => {
@@ -53,7 +53,7 @@ const observer = new MutationObserver((mutations, _) => {
             const root = ReactDOM.createRoot(document.getElementById(magicalRootId)!)
             root.render(
                 <React.StrictMode>
-                    <Magically target={textTarget} />
+                    <MagicallyGmail target={textTarget}/>
                 </React.StrictMode>
             )
         })

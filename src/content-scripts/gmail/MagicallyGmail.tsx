@@ -1,10 +1,11 @@
 import React, {FC, useEffect, useState} from "react";
-import MagicalToolbar from "./MagicalToolbar";
+import MagicalToolbarGmail from "./MagicalToolbarGmail";
 import {EventSourceMessage} from "@microsoft/fetch-event-source";
-import {GPTCompletionToken, lengthToCredit, lengthToToken} from "../utils/constants";
-import {GPTRequest, GPTResponse} from "../types/GPT";
-import useFetchEventSource from "../hooks/useFetchEventSource";
-import {MagicalTextOption} from "../types/Magically";
+import {GPTCompletionToken, lengthToCredit, lengthToToken} from "../../utils/constants";
+import {GPTRequest, GPTResponse} from "../../types/GPT";
+import useFetchEventSource from "../../hooks/useFetchEventSource";
+import {MagicalTextOption} from "../../types/Magically";
+import "./magically-toolbar-gmail.css"
 
 function createGPTRequestBody(type: MagicalTextOption, prompt: string, mood: string, length: string): GPTRequest {
     let promptForGPT;
@@ -23,7 +24,7 @@ function createGPTRequestBody(type: MagicalTextOption, prompt: string, mood: str
     }
 }
 
-const Magically: FC<{target: Element}> = ({target}) => {
+const MagicallyGmail: FC<{ target: Element }> = ({target}) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>("");
 
@@ -86,8 +87,8 @@ const Magically: FC<{target: Element}> = ({target}) => {
     }
 
     return <>
-        <MagicalToolbar loading={loading} error={error} setPromptParams={setPromptParams} />
+        <MagicalToolbarGmail loading={loading} error={error} setPromptParams={setPromptParams}/>
     </>
 }
 
-export default Magically
+export default MagicallyGmail
