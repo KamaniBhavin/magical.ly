@@ -1,4 +1,4 @@
-export type MagicalTextOption = "write" | "rephrase"
+export type MagicalTextOption = "write" | "rephrase" | "reply"
 
 export interface UserData {
     profileImage: string | null,

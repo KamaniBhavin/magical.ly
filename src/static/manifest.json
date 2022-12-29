@@ -35,6 +35,15 @@
         "gmail.js"
       ],
       "all_frames": true
+    },
+    {
+      "matches": [
+        "https://twitter.com/*"
+      ],
+      "js": [
+        "twitter.js"
+      ],
+      "all_frames": true
     }
   ],
   "background": {
