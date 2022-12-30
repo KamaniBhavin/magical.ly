@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from "react";
+import React, {FC, useState} from "react";
 import MagicalToolbarGmail from "./MagicalToolbarGmail";
 import {EventSourceMessage} from "@microsoft/fetch-event-source";
 import {GPTCompletionToken, lengthToCredit, lengthToToken} from "../../utils/constants";
@@ -7,13 +7,17 @@ import useFetchEventSource from "../../hooks/useFetchEventSource";
 import {MagicalTextOption} from "../../types/Magically";
 import "./magically-toolbar-gmail.css"
 
-function createGPTRequestBody(type: MagicalTextOption, prompt: string, mood: string, length: string): GPTRequest {
+function createGPTRequestBody(type: MagicalTextOption, target: Element, mood: string, length: string): GPTRequest {
     let promptForGPT;
 
-    if (type == "write") {
-        promptForGPT = `${prompt}. It should sound like ${mood} and keep it ${length} in length. Do not write subject of the mail.`
+    const quote = target.querySelector(".gmail_quote")?.getElementsByTagName("blockquote")?.[0]?.firstChild?.textContent;
+
+    if (quote) {
+        promptForGPT = `Write a response to the following email: ${quote}`;
+    } else if (type == "write") {
+        promptForGPT = `${target.textContent}. It should sound like ${mood} and keep it ${length} in length. Do not write subject of the mail.`
     } else {
-        promptForGPT = `Rephrase ${prompt} to sound like ${mood} and keep it ${length} words long. Also, Fix the spelling mistakes`
+        promptForGPT = `Rephrase ${target.textContent} to sound like ${mood} and keep it ${length} words long. Also, Fix the spelling mistakes`
     }
 
     return {
@@ -28,17 +32,6 @@ const MagicallyGmail: FC<{ target: Element }> = ({target}) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>("");
 
-    useEffect(() => {
-        (async () => {
-            const obj = await chrome.storage.sync.get(["accessToken", "credits"]);
-            if (!obj["accessToken"]) {
-                setError("Login for a magical experience.")
-            } else if (!obj["credits"] || obj["credits"] <= 0) {
-                setError("Not Enough Credits!")
-            }
-        })()
-    }, [])
-
     async function setPromptParams(type: MagicalTextOption, mood: string, length: string) {
         setLoading(true)
 
@@ -46,7 +39,7 @@ const MagicallyGmail: FC<{ target: Element }> = ({target}) => {
             setError("Please add prompt for magically to work with!")
         } else {
             const endpoint = "/completions"
-            const body = createGPTRequestBody(type, target.textContent, mood, length)
+            const body = createGPTRequestBody(type, target, mood, length)
 
             function onOpen() {
                 target.textContent = ""
