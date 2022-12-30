@@ -2,65 +2,58 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import MagicallyGmail from "./MagicallyGmail";
 
-function getClosestTextTarget(element: Element, className: string): Element | undefined {
-    const targets = Array.from(element.children).map((c) => {
-        if (c.classList.contains(className)) {
-            return c;
-        }
-        return getClosestTextTarget(c, className)
-    }).filter((t) => t)
-
-    if (!targets || !targets.length) {
-        return;
-    }
-
-    return targets[0];
-}
+const magicalRoots = new Set<string>();
 
 const observer = new MutationObserver((mutations, _) => {
-    console.log("mutation")
-    mutations.forEach((_) => {
-        const magicRootTargets = document.getElementsByClassName("HE");
 
-        if (!magicRootTargets || !magicRootTargets.length) {
+    mutations.forEach((m) => {
+
+        const target = Array.from(m.addedNodes)
+            .filter(n => n instanceof Element)
+            .map(n => n as Element)
+            .filter(e => e.querySelector(".HE"))
+            .find((e) => e.querySelector(".HE"))
+
+
+        if (!target) {
             return;
         }
 
-        Array.from(magicRootTargets).forEach((target) => {
+        const magicRootTarget = target.querySelector(".btC")
 
-            if (!target.parentElement || !target.parentElement.previousElementSibling) {
-                return;
-            }
+        if (!magicRootTarget) {
+            return;
+        }
 
-            const textTarget = getClosestTextTarget(target.parentElement.previousElementSibling, "editable")
+        const textTarget = target.querySelector(".editable")
 
-            if (!textTarget) {
-                return;
-            }
+        if (!textTarget) {
+            return;
+        }
 
-            const magicalRootId = `magical-root-${target.id}-${textTarget.id}`;
+        const magicalRootId = `magical-root-${magicRootTarget.id}-${textTarget.id}`;
 
-            if (Array.from(target.children).some((n) => n.id == magicalRootId)) {
-                return;
-            }
+        if (magicalRoots.has(magicalRootId)) {
+            return;
+        }
 
-            const magicalRoot = document.createElement("div");
-            magicalRoot.id = magicalRootId;
-            target.prepend(magicalRoot);
+        const magicalRoot = document.createElement("div");
+        magicalRoot.id = magicalRootId;
+        magicRootTarget.prepend(magicalRoot);
+        magicalRoots.add(magicalRootId);
 
-            textTarget.textContent = "Write an email "
+        textTarget.textContent = "Write an email "
 
-            const root = ReactDOM.createRoot(document.getElementById(magicalRootId)!)
-            root.render(
-                <React.StrictMode>
-                    <MagicallyGmail target={textTarget}/>
-                </React.StrictMode>
-            )
-        })
+        const root = ReactDOM.createRoot(document.getElementById(magicalRootId)!)
+        root.render(
+            <React.StrictMode>
+                <MagicallyGmail target={textTarget}/>
+            </React.StrictMode>
+        )
     })
 })
 
 const body = document.getElementsByTagName("body")[0];
 
-observer.observe(body, { attributes: false, childList: true, subtree: false })
+observer.observe(body, {attributes: false, childList: true, subtree: true})
 

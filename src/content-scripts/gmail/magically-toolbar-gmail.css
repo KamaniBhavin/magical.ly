@@ -1,19 +1,21 @@
 .magical-toolbar {
     display: flex;
     height: 30px;
-    position: relative;
-    padding: 0.5em;
+    position: absolute;
+    padding: 0.5rem;
     border-radius: 3em;
-    bottom: 46px;
-    margin-left: 8px;
+    bottom: 4rem;
+    right: 1rem;
+    margin-left: 0.5rem;
     gap: 1rem;
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
 }
 
 .magical-toolbar__section {
     display: flex;
     gap: 0.5rem;
     border-radius: 16px;
-    background-color: #f6f4fa;
 }
 
 .magical-toolbar__option-btn {
