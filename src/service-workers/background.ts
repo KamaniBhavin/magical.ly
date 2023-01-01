@@ -114,3 +114,24 @@ async function deductCredits() {
 function sendError(message: string): ChromeMessageResponse {
     return ["error", {error: message}]
 }
+
+chrome.runtime.onInstalled.addListener(async () => {
+    const contentScripts = chrome.runtime.getManifest().content_scripts
+
+    contentScripts?.forEach((script) => {
+        chrome.tabs.query({url: script.matches})
+            .then((tabs) => {
+                tabs.forEach((tab) => {
+                    if (!tab || !tab.id || !script || !script.js) {
+                        return
+                    }
+
+                    chrome.scripting.executeScript({
+                        target: {tabId: tab.id},
+                        files: script.js
+                    })
+                })
+            })
+    })
+
+})
