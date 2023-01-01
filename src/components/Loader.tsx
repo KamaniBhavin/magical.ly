@@ -2,7 +2,7 @@ import React, {FC} from "react";
 import {MoonLoader} from "react-spinners";
 
 
-const Loading: FC<{ color?: string }> = ({color}) => {
+const Loader: FC<{ color?: string }> = ({color}) => {
     const override = {
         display: 'flex',
     }
@@ -10,4 +10,4 @@ const Loading: FC<{ color?: string }> = ({color}) => {
     return <MoonLoader color={color || "#9c67ff"} size="22px" cssOverride={override}/>
 }
 
-export default Loading;
+export default Loader;

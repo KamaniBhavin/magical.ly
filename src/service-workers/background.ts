@@ -2,7 +2,6 @@ import {createClient, Provider} from "@supabase/supabase-js";
 import {supabaseAnonKey, supabaseAppUrl} from "../utils/constant.supabse";
 import {ChromeMessage, ChromeMessageResponse} from "../types/Chrome";
 import {Database} from "../types/databse.supabase";
-import {UserData} from "../types/Magically";
 
 const supabase = createClient<Database>(supabaseAppUrl, supabaseAnonKey);
 
@@ -16,7 +15,10 @@ chrome.runtime.onMessage.addListener(([type, payload]: ChromeMessage, sender, se
                 response = await OAuthLogout()
                 sendResponse(response)
             } else if (type == "fetchUser") {
-                response = await getUserFromToken(payload.accessToken)
+                response = await fetchUser()
+                sendResponse(response)
+            } else if (type == "deductCredits") {
+                response = await deductCredits()
                 sendResponse(response)
             } else {
                 response = sendError("Invalid message!")
@@ -53,35 +55,32 @@ async function OAuthLogin(provider: Provider): Promise<ChromeMessageResponse> {
         return sendError("Cannot verify identity. Try again later!")
     }
 
-    const obj = await chrome.storage.sync.get("credits")
-
-    await chrome.storage.sync.set({accessToken, refreshToken, credits: obj["credits"] ?? 100})
-
-    return ["login_success", {accessToken}]
-
-}
-
-async function getUserFromToken(accessToken: string): Promise<ChromeMessageResponse> {
-    const {data: user, error: err} = await supabase.auth.getUser(accessToken)
+    const {data: {user}, error: err} = await supabase.auth.getUser(accessToken);
 
     if (err || !user) {
         return sendError("Cannot retrieve user at the moment. Try again later!")
     }
 
-    const obj = await chrome.storage.sync.get("credits")
+    await chrome.storage.sync.set({accessToken, refreshToken, userId: user.id})
 
-    const userData: UserData = {
-        profileImage: user.user?.user_metadata["avatar_url"],
-        fullName: user.user?.user_metadata["name"],
-        email: user.user?.email ?? "no email",
-        credits: obj["credits"] ?? 0,
+    return ["login_success", {accessToken}]
+
+}
+
+async function fetchUser(): Promise<ChromeMessageResponse> {
+    const {userId} = await chrome.storage.sync.get("userId")
+
+    const {data, error} = await supabase.rpc("get_user_data", {user_id: userId})
+
+    if (error) {
+        return sendError(error.message)
     }
 
-    return ["fetch_user", {user: userData}]
+    return ["fetch_user", {user: data[0]}]
 }
 
 async function OAuthLogout(): Promise<ChromeMessageResponse> {
-    await chrome.storage.sync.remove(["accessToken", "refreshToken"])
+    await chrome.storage.sync.remove(["accessToken", "refreshToken", "userId"])
     const {error} = await supabase.auth.signOut()
 
     if (error) {
@@ -89,6 +88,23 @@ async function OAuthLogout(): Promise<ChromeMessageResponse> {
     }
 
     return ["logout_success", {message: "Successfully logged out!"}]
+}
+
+async function deductCredits() {
+    const {userId} = await chrome.storage.sync.get("userId");
+
+    if (!userId) {
+        sendError("You are not logged in!")
+    }
+
+    const {data, error} = await supabase.rpc("deduct_credits", {user_id: userId, amount: 1})
+
+    if (error) {
+        console.error("[ERROR] tokens", error)
+        return sendError(error.message)
+    }
+
+    return data
 }
 
 function sendError(message: string): ChromeMessageResponse {

@@ -5,6 +5,7 @@ import {GPTRequest, GPTResponse} from "../../types/GPT";
 import useFetchEventSource from "../../hooks/useFetchEventSource";
 import {MagicalTextOption} from "../../types/Magically";
 import MagicalToolbarTwitter from "./MagicalToolbarTwitter";
+import {ChromeMessage, ChromeMessageResponse} from "../../types/Chrome";
 
 function createGPTRequestBody(
     type: MagicalTextOption,
@@ -71,6 +72,7 @@ const MagicallyTwitter: FC<{ target: HTMLElement, context: string }> = ({target,
         async function onClose() {
             target.click()
             target.dispatchEvent(new Event("input", {bubbles: true}))
+            await chrome.runtime.sendMessage<ChromeMessage, ChromeMessageResponse>(["deductCredits", {}])
         }
 
         function onError(error: any) {

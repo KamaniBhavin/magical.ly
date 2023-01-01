@@ -6,6 +6,25 @@ body {
     margin: 0;
 }
 
+.btn {
+    text-decoration: none;
+    border: none;
+}
+
+.btn:hover {
+    cursor: pointer;
+    opacity: 0.9;
+}
+
+.glass-morphism {
+    background: rgba(255, 255, 255, 0);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(11px);
+    -webkit-backdrop-filter: blur(11px);
+}
+
+/**** OAuth ****/
+
 .oauth {
     display: flex;
     flex-direction: column;
@@ -33,6 +52,8 @@ body {
     color: #c2c2c2;
 }
 
+/**** Home ****/
+
 .home {
     margin-top: 2rem;
     display: flex;
@@ -49,4 +70,17 @@ body {
 
 .profile__text--lrg {
     font-size: 2rem;
+}
+
+/**** Error ****/
+
+.error {
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.error__text {
+    color: red;
 }

@@ -1,11 +1,12 @@
 import React, {FC, useState} from "react";
 import MagicalToolbarGmail from "./MagicalToolbarGmail";
 import {EventSourceMessage} from "@microsoft/fetch-event-source";
-import {GPTCompletionToken, lengthToCredit, lengthToToken} from "../../utils/constants";
+import {GPTCompletionToken, lengthToToken} from "../../utils/constants";
 import {GPTRequest, GPTResponse} from "../../types/GPT";
 import useFetchEventSource from "../../hooks/useFetchEventSource";
 import {MagicalTextOption} from "../../types/Magically";
 import "./magically-toolbar-gmail.css"
+import {ChromeMessage, ChromeMessageResponse} from "../../types/Chrome";
 
 function createGPTRequestBody(type: MagicalTextOption, target: Element, mood: string, length: string): GPTRequest {
     let promptForGPT;
@@ -65,9 +66,7 @@ const MagicallyGmail: FC<{ target: Element }> = ({target}) => {
             }
 
             async function onClose() {
-                const current = await chrome.storage.sync.get("credits")
-                const count = Number(current["credits"])
-                await chrome.storage.sync.set({credits: count - lengthToCredit[length]})
+                await chrome.runtime.sendMessage<ChromeMessage, ChromeMessageResponse>(["deductCredits", {}])
             }
 
             function onError(error: any) {

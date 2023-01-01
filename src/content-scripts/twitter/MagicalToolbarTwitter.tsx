@@ -1,6 +1,6 @@
 import React, {FC, useState} from "react";
 import "./magically-toolbar-twitter.css"
-import Loading from "../../components/Loading";
+import Loader from "../../components/Loader";
 import {MagicalTextOption} from "../../types/Magically";
 
 
@@ -53,7 +53,7 @@ const MagicalToolbarTwitter: FC<{
         </div>
 
         <div className="magical-toolbar__section">
-            {loading ? <Loading/> : <></>}
+            {loading ? <Loader/> : <></>}
         </div>
 
     </div>

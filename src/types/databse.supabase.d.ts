@@ -1,3 +1,5 @@
+import {UserDetails} from "./database.magically";
+
 export type Json =
     | string
     | number
@@ -7,40 +9,44 @@ export type Json =
     | Json[]
 
 export interface Database {
-    public: {
-        Tables: {
-            credits: {
-                Row: {
-                    id: number
-                    created_at: string
-                    updated_at: string
-                    count: number
-                    user_id: string
-                }
-                Insert: {
-                    id?: number
-                    created_at?: string
-                    updated_at?: string
-                    count?: number
-                    user_id: string
-                }
-                Update: {
-                    id?: number
-                    created_at?: string
-                    updated_at?: string
-                    count?: number
-                    user_id?: string
-                }
-            }
+  public: {
+    Tables: {
+      credits: {
+        Row: {
+          user_id: string
+          tokens: number
+          id: number
+          created_at: string
         }
-        Views: {
-            [_ in never]: never
+        Insert: {
+          user_id: string
+          tokens?: number
+          id?: number
+          created_at?: string
         }
-        Functions: {
-            [_ in never]: never
+        Update: {
+          user_id?: string
+          tokens?: number
+          id?: number
+          created_at?: string
         }
-        Enums: {
-            [_ in never]: never
-        }
+      }
     }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      deduct_credits: {
+        Args: { user_id: string; amount: number }
+        Returns: undefined
+      }
+      get_user_data: {
+        Args: { user_id: string }
+        Returns: UserDetails
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+  }
 }

@@ -1,13 +1,12 @@
 import React, {FC, ReactElement} from "react";
 import "./oAuthLoginButton.css"
-import "./common.css"
 
 const OAuthLoginButton: FC<{
     ProviderIcon: ReactElement,
     title: string,
-    action: Function
-}> = ({ProviderIcon, title, action}) => {
-    return <button className="btn oauth__login-btn" onClick={() => action()}>
+    onClick: Function
+}> = ({ProviderIcon, title, onClick}) => {
+    return <button className="btn oauth__login-btn" onClick={() => onClick()}>
         <div className="oauth__provider-icon">
             {ProviderIcon}
         </div>

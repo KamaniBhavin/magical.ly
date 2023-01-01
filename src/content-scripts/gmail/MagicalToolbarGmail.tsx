@@ -1,6 +1,6 @@
 import React, {FC, useState} from "react";
 import "./magically-toolbar-gmail.css"
-import Loading from "../../components/Loading";
+import Loader from "../../components/Loader";
 import {contentLengths, moods} from "../../utils/constants";
 import {MagicalTextOption} from "../../types/Magically";
 
@@ -67,7 +67,7 @@ const MagicalToolbarGmail: FC<{
         </div>
 
         <div className="magical-toolbar__section">
-            {loading ? <Loading/> : <></>}
+            {loading ? <Loader/> : <></>}
         </div>
 
     </div>

@@ -1,37 +1,13 @@
 import {Provider} from "@supabase/supabase-js";
-import {UserData} from "./Magically";
+import {UserDetails} from "./database.magically";
 
-type ChromeMessageResponseStatus = "success" | "error"
-
-export interface ChromeLoginMessage {
-    provider: Provider
-}
-
-export interface ChromeGetUserMessage {
-    accessToken: string
-}
-
-export type ChromeMessage = ["login", ChromeLoginMessage] | ["logout", {}] | ["fetchUser", ChromeGetUserMessage]
+export type ChromeMessage = ["login", { provider: Provider }]
+    | ["logout", {}]
+    | ["fetchUser", {}]
+    | ["deductCredits", {}]
 
 
-export interface ChromeLoginResponse {
-    accessToken: string
-}
-
-export interface ChromeLogoutResponse {
-    message: string
-}
-
-export interface ChromeFetchUserResponse {
-    user: UserData
-}
-
-export interface ChromeErrorResponse {
-    error: string
-}
-
-export type ChromeMessageResponse =
-    ["login_success", ChromeLoginResponse] |
-    ["logout_success", ChromeLogoutResponse] |
-    ["fetch_user", ChromeFetchUserResponse] |
-    ["error", ChromeErrorResponse]
+export type ChromeMessageResponse = ["login_success", { accessToken: string }]
+    | ["logout_success", { message: string }]
+    | ["fetch_user", { user: UserDetails }]
+    | ["error", { error: string }]

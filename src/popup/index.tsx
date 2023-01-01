@@ -1,36 +1,53 @@
-import React, {useEffect, useReducer} from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles.css"
-import PopupLayout from "../components/PopupLayout";
-import OAuthScreen from "./OAuthScreen";
-import {authStateReducer, initialState} from "../reducers/authStateReducer";
-import HomeScreen from "./HomeScreen";
+import OAuth from "./pages/OAuth";
+import Home from "./pages/Home";
+import {createMemoryRouter, defer, json, redirect, RouterProvider} from "react-router-dom";
+import {ChromeMessage, ChromeMessageResponse} from "../types/Chrome";
+import AppError from "./pages/AppError";
+import {UserDetails} from "../types/database.magically";
 
+const router = createMemoryRouter([
+    {
+        path: "/home",
+        element: <Home/>,
+        loader: async () => {
+            return defer({
+                user: new Promise<UserDetails>(async (resolve, reject) => {
+                    const [event, message] = await chrome.runtime.sendMessage<ChromeMessage, ChromeMessageResponse>(["fetchUser", {}])
 
-const App = () => {
-    const [state, dispatch] = useReducer(authStateReducer, initialState);
-
-    useEffect(() => {
-        (async () => {
-            const object = await chrome.storage.sync.get("accessToken")
-
-            dispatch({
-                type: "storage",
-                payload: {accessToken: object["accessToken"], error: null}
+                    if (event === "fetch_user") {
+                        resolve(message.user)
+                    } else if (event === "error") {
+                        reject(message.error)
+                    } else {
+                        reject("Unknown error")
+                    }
+                })
             })
-        })()
-    }, [])
-
-    return <PopupLayout state={state} dispatch={dispatch}>
-        {
-            state.accessToken
-                ? <HomeScreen accessToken={state.accessToken} dispatch={dispatch}/>
-                : <OAuthScreen dispatch={dispatch}/>
-        }
-    </PopupLayout>
-}
+        },
+        errorElement: <AppError/>
+    },
+    {
+        path: "/",
+        element: <OAuth/>,
+        loader: async () => {
+            const {userId} = await chrome.storage.sync.get(["userId"])
+            if (userId) {
+                return redirect("/home")
+            }
+            return json({})
+        },
+        errorElement: <AppError/>
+    },
+    {
+        path: "/error",
+        element: <AppError/>
+    }
+])
 
 const root = ReactDOM.createRoot(document.getElementById("root")!)
 root.render(
-    <App/>
+    <RouterProvider router={router}/>
 )
