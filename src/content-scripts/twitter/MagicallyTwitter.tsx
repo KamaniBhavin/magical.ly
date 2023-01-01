@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {EventSourceMessage} from "@microsoft/fetch-event-source";
 import {GPTCompletionToken} from "../../utils/constants";
 import {GPTRequest, GPTResponse} from "../../types/GPT";
@@ -34,6 +34,16 @@ function createGPTRequestBody(
 const MagicallyTwitter: FC<{ target: HTMLElement, context: string }> = ({target, context}) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>("");
+
+    useEffect(() => {
+        (async () => {
+                const {userId} = await chrome.storage.sync.get(["userId"]);
+                if (!userId) {
+                    setError("Please login!");
+                }
+            }
+        )()
+    })
 
     async function setPromptParams(type: MagicalTextOption, mood: string) {
         setLoading(true)

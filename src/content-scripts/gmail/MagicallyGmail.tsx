@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import MagicalToolbarGmail from "./MagicalToolbarGmail";
 import {EventSourceMessage} from "@microsoft/fetch-event-source";
 import {GPTCompletionToken, lengthToToken} from "../../utils/constants";
@@ -32,6 +32,16 @@ function createGPTRequestBody(type: MagicalTextOption, target: Element, mood: st
 const MagicallyGmail: FC<{ target: Element }> = ({target}) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>("");
+
+    useEffect(() => {
+        (async () => {
+                const {userId} = await chrome.storage.sync.get(["userId"]);
+                if (!userId) {
+                    setError("Please login!");
+                }
+            }
+        )()
+    })
 
     async function setPromptParams(type: MagicalTextOption, mood: string, length: string) {
         setLoading(true)
