@@ -25,7 +25,7 @@ const Header: FC<{ showLogout: boolean }> = ({showLogout = false}) => {
         <div className="header__logo">
             <img src="./icons/icon-32.png" alt="Magical.ly"/>
         </div>
-        <div className="header__title">Magically</div>
+        <div className="header__title">Magical.ly</div>
         <div className="header__right">
             {loading
                 ? <Loader color={"#ffffff"}/>
