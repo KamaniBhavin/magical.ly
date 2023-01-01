@@ -38,7 +38,7 @@ export interface Database {
     Functions: {
       deduct_credits: {
         Args: { user_id: string; amount: number }
-        Returns: undefined
+        Returns: number
       }
       get_user_data: {
         Args: { user_id: string }

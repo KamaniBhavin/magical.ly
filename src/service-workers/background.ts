@@ -61,7 +61,7 @@ async function OAuthLogin(provider: Provider): Promise<ChromeMessageResponse> {
         return sendError("Cannot retrieve user at the moment. Try again later!")
     }
 
-    await chrome.storage.sync.set({accessToken, refreshToken, userId: user.id})
+    await chrome.storage.sync.set({accessToken, refreshToken, userId: user.id, tokens: 0})
 
     return ["login_success", {accessToken}]
 
@@ -75,6 +75,8 @@ async function fetchUser(): Promise<ChromeMessageResponse> {
     if (error) {
         return sendError(error.message)
     }
+
+    await chrome.storage.sync.set({tokens: data[0].tokens})
 
     return ["fetch_user", {user: data[0]}]
 }
@@ -104,7 +106,9 @@ async function deductCredits() {
         return sendError(error.message)
     }
 
-    return data
+    await chrome.storage.sync.set({tokens: data})
+
+    return ["updated_credits", {credits: data}]
 }
 
 function sendError(message: string): ChromeMessageResponse {

@@ -37,9 +37,13 @@ const MagicallyTwitter: FC<{ target: HTMLElement, context: string }> = ({target,
 
     useEffect(() => {
         (async () => {
-                const {userId} = await chrome.storage.sync.get(["userId"]);
+                const {userId, tokens} = await chrome.storage.sync.get(["userId", "tokens"]);
                 if (!userId) {
                     setError("Please login!");
+                } else if (!tokens || tokens < 1) {
+                    setError("Not enough tokens!");
+                } else {
+                    setError("");
                 }
             }
         )()
