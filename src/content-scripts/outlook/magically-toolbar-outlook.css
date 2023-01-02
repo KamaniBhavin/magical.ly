@@ -1,0 +1,77 @@
+.magical-toolbar {
+    display: flex;
+    height: 30px;
+    padding: 0.5rem;
+    border-radius: 3em;
+    margin-left: 0.5rem;
+    gap: 3rem;
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+}
+
+.magical-toolbar__section {
+    display: flex;
+    gap: 0.5rem;
+    border-radius: 16px;
+}
+
+.magical-toolbar__option-btn {
+    border: 2px solid #ddcdfd;
+    text-align: center;
+    border-radius: 2em;
+    padding: 0.3em 0.5em
+}
+
+.magical-toolbar__option-btn--tooltip {
+    visibility: hidden;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.50);
+    font-size: 0.75rem;
+    padding: 0.5em;
+    top: -1.5em;
+    z-index: 999;
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+}
+
+.magical-toolbar__option-container {
+    max-width: min-content;
+}
+
+.magical-toolbar__option-btn:hover {
+    border: 2px solid #9e9e9e;
+}
+
+.magical-toolbar__option-container:hover .magical-toolbar__option-btn--tooltip {
+    visibility: visible;
+}
+
+.magical-toolbar__option-btn--selected {
+    background-color: #9c67ff;
+}
+
+.magical-toolbar__action-section {
+    margin: 0 auto;
+}
+
+.magical-toolbar__primary-btn {
+    background-color: #9c67ff;
+    color: white;
+}
+
+.magical-toolbar__secondary-btn {
+    color: #9c67ff;
+}
+
+.magical-toolbar__primary-btn--disabled {
+    background-color: #9c67ff85
+}
+
+.magical-toolbar__secondary-btn--disabled {
+    color: #9c67ff85;
+}
+
+.magical-toolbar__error-btn {
+    color: #ff003b;
+    border: 2px solid #ff003b;
+}

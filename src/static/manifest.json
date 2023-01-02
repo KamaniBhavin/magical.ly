@@ -44,6 +44,15 @@
         "twitter.js"
       ],
       "all_frames": true
+    },
+    {
+      "matches": [
+        "https://outlook.office.com/*"
+      ],
+      "js": [
+        "outlook.js"
+      ],
+      "all_frames": true
     }
   ],
   "background": {

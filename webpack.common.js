@@ -10,7 +10,8 @@ module.exports = () => {
             popup: path.resolve("src/popup/index.tsx"),
             gmail: path.resolve("src/content-scripts/gmail/index.tsx"),
             background: path.resolve("src/service-workers/background.ts"),
-            twitter: path.resolve("src/content-scripts/twitter/index.tsx")
+            twitter: path.resolve("src/content-scripts/twitter/index.tsx"),
+            outlook: path.resolve("src/content-scripts/outlook/index.tsx"),
         },
         resolve: {
             extensions: [".ts", ".tsx", ".js", ".jsx"]
@@ -50,7 +51,8 @@ module.exports = () => {
                 chunks(chunk) {
                     return chunk.name !== "background" &&
                         chunk.name !== "gmail" &&
-                        chunk.name !== "twitter";
+                        chunk.name !== "twitter" &&
+                        chunk.name !== "outlook";
                 }
             }
         }
