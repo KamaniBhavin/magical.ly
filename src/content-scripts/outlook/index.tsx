@@ -49,7 +49,7 @@ const observer = new MutationObserver((mutations, _) => {
         const root = ReactDOM.createRoot(document.getElementById(magicalRootId)!)
         root.render(
             <React.StrictMode>
-                <MagicallyOutlook target={textTarget.firstElementChild}/>
+                <MagicallyOutlook target={textTarget}/>
             </React.StrictMode>
         )
     });

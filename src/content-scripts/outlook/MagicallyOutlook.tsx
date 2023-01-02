@@ -9,10 +9,20 @@ import "./magically-toolbar-outlook.css"
 import {ChromeMessage, ChromeMessageResponse} from "../../types/Chrome";
 
 function createGPTRequestBody(type: MagicalTextOption, target: Element, mood: string, length: string): GPTRequest {
-    let promptForGPT;
+    let promptForGPT, promptPrefix;
+
+    /**
+     * Similar to `gmail-quote` but for Outlook.
+     * This is a bit hacky but it works.
+     **/
+    if (target.nextElementSibling) {
+        promptPrefix = `Write an reply for ${target.nextElementSibling.textContent}`;
+    } else {
+        promptPrefix = target.textContent;
+    }
 
     if (type == "write") {
-        promptForGPT = `${target.textContent}. It should sound like ${mood} and keep it ${length} in length. Do not write subject of the mail.`
+        promptForGPT = `${promptPrefix}. It should sound like ${mood} and keep it ${length} in length. Do not write subject of the mail.`
     } else {
         promptForGPT = `Rephrase ${target.textContent} to sound like ${mood} and keep it ${length} words long. Also, Fix the spelling mistakes`
     }
@@ -48,45 +58,43 @@ const MagicallyOutlook: FC<{ target: Element }> = ({target}) => {
     async function setPromptParams(type: MagicalTextOption, mood: string, length: string) {
         setLoading(true)
 
-        if (target.textContent == null) {
-            setError("Please add prompt for magically to work with!")
-        } else {
-            const endpoint = "/completions"
-            const body = createGPTRequestBody(type, target, mood, length)
+        const endpoint = "/completions"
+        const body = createGPTRequestBody(type, target, mood, length)
 
-            function onOpen() {
-                target.textContent = ""
-                setLoading(false)
-            }
-
-            function onMessage(event: EventSourceMessage) {
-                if (event.data != GPTCompletionToken) {
-                    const parsed: GPTResponse = JSON.parse(event.data)
-                    const token = parsed.choices[0].text
-
-                    dataTransfer.setData("text/plain", token);
-
-                    target.dispatchEvent(new ClipboardEvent("paste", {
-                        clipboardData: dataTransfer,
-                        bubbles: true,
-                        cancelable: true,
-                    }));
-
-                    dataTransfer.clearData();
-                }
-            }
-
-            async function onClose() {
-                await chrome.runtime.sendMessage<ChromeMessage, ChromeMessageResponse>(["deductCredits", {}])
-            }
-
-            function onError(error: any) {
-                setLoading(false)
-                setError(error)
-            }
-
-            await useFetchEventSource<GPTRequest>(endpoint, body, onOpen, onMessage, onClose, onError)
+        function onOpen() {
+            target.firstElementChild!.textContent = ""
+            setLoading(false)
         }
+
+        function onMessage(event: EventSourceMessage) {
+            if (event.data != GPTCompletionToken) {
+                const parsed: GPTResponse = JSON.parse(event.data)
+                const token = parsed.choices[0].text
+
+                dataTransfer.setData("text/plain", token);
+            } else {
+                dataTransfer.setData("text/plain", "\n\n\n");
+            }
+
+            target.firstElementChild!.dispatchEvent(new ClipboardEvent("paste", {
+                clipboardData: dataTransfer,
+                bubbles: true,
+                cancelable: true,
+            }));
+
+            dataTransfer.clearData();
+        }
+
+        async function onClose() {
+            await chrome.runtime.sendMessage<ChromeMessage, ChromeMessageResponse>(["deductCredits", {}])
+        }
+
+        function onError(error: any) {
+            setLoading(false)
+            setError(error)
+        }
+
+        await useFetchEventSource<GPTRequest>(endpoint, body, onOpen, onMessage, onClose, onError);
     }
 
     return <>
