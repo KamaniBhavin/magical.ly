@@ -61,7 +61,9 @@ async function OAuthLogin(provider: Provider): Promise<ChromeMessageResponse> {
         return sendError("Cannot retrieve user at the moment. Try again later!")
     }
 
-    await chrome.storage.sync.set({accessToken, refreshToken, userId: user.id, tokens: 0})
+    await chrome.storage.sync.set({accessToken, refreshToken, userId: user.id, tokens: 0});
+
+    await fetchUser()
 
     return ["login_success", {accessToken}]
 
@@ -76,7 +78,7 @@ async function fetchUser(): Promise<ChromeMessageResponse> {
         return sendError(error.message)
     }
 
-    await chrome.storage.sync.set({tokens: data[0].tokens})
+    await chrome.storage.sync.set({tokens: data[0].tokens, uniqueMagicalId: data[0].unique_magical_id})
 
     return ["fetch_user", {user: data[0]}]
 }

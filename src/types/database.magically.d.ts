@@ -7,4 +7,5 @@ export interface UserDetails {
     full_name: string
     avatar_url: string
     provider_id: string
+    unique_magical_id: string
 }

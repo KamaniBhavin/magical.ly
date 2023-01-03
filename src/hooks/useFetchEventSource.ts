@@ -2,7 +2,6 @@ import {fetchEventSource} from "@microsoft/fetch-event-source";
 
 
 const openAPIBaseUrl = "https://api.openai.com/v1"
-const GPTToken = "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"
 
 async function useFetchEventSource<T>(
     endpoint: string,
@@ -12,12 +11,14 @@ async function useFetchEventSource<T>(
     onClose: Function,
     onError: Function
 ) {
+    const {uniqueMagicalId} = await chrome.storage.sync.get("uniqueMagicalId");
+
     await fetchEventSource(`${openAPIBaseUrl}${endpoint}`,
         {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${GPTToken}`
+                'Authorization': `Bearer ${uniqueMagicalId}`
             },
             body: JSON.stringify(body),
             async onopen(res) {
