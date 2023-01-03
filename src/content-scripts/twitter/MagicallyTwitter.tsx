@@ -15,8 +15,6 @@ function createGPTRequestBody(
 ): GPTRequest {
     let promptForGPT;
 
-    console.log("context", context)
-
     if (context) {
         promptForGPT = `Write a tweet to reply to ${context}. It should sound like ${mood}. It should be ${length}.`;
     } else {

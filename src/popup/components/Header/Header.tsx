@@ -14,7 +14,6 @@ const Header: FC<{ showLogout: boolean }> = ({showLogout = false}) => {
         const [event, _] = await chrome.runtime.sendMessage<ChromeMessage, ChromeMessageResponse>(["logout", {}]);
 
         if (event == "logout_success") {
-            console.log("Logged out")
             navigate("/")
         } else {
             navigate("/error")

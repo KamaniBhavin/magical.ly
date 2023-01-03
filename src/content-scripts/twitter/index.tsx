@@ -34,7 +34,6 @@ const observer = new MutationObserver((mutations, _) => {
             const closestTextTarget = getClosestTextTarget(textTarget)
 
             if (!closestTextTarget) {
-                console.log("No closest target!")
                 return;
             }
 
@@ -89,7 +88,5 @@ function getUniqueEditorId(element: Element) {
 }
 
 const body = document.getElementsByTagName("body")[0];
-
-console.log(body)
 
 observer.observe(body, {attributes: false, childList: true, subtree: true})
