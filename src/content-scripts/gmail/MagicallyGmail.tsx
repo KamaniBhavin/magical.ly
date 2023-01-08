@@ -76,7 +76,10 @@ const MagicallyGmail: FC<{ target: Element }> = ({target}) => {
                     }
 
                 } else {
-                    target.append(lineBreak)
+                    const div = document.createElement("div")
+                    div.className = "magical-whitespace"
+                    div.append(lineBreak)
+                    target.append(div)
                 }
             }
 
