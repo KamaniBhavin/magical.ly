@@ -3,74 +3,69 @@ import React from "react";
 import MagicallyTwitter from "./MagicallyTwitter";
 
 
-const magicalRoots = new Set<string>();
-
 const observer = new MutationObserver((mutations, _) => {
 
-    mutations.forEach((m) => {
-        const targetWithTwitterToolbar = Array.from(m.addedNodes)
-            .filter(n => n instanceof Element)
-            .map(n => n as Element)
-            .find(e => e.querySelector(`[data-testid="toolBar"]`));
+    mutations.forEach((_) => {
+        const targetsWithTwitterToolbar = document.querySelectorAll(".css-1dbjc4n.r-1iusvr4.r-16y2uox.r-1777fci.r-1h8ys4a.r-1bylmt5.r-13tjlyg.r-7qyjyx.r-1ftll1t")
 
-        if (!targetWithTwitterToolbar) {
+        if (!targetsWithTwitterToolbar || !targetsWithTwitterToolbar.length) {
             return;
         }
 
-        const magicalRootTarget = targetWithTwitterToolbar.querySelector(`[data-testid="toolBar"]`)
+        targetsWithTwitterToolbar.forEach((target) => {
+            const magicalRootTarget = target.querySelector(`[data-testid="toolBar"]`);
 
-        if (!magicalRootTarget) {
-            return;
-        }
-
-        const textTargets = document.getElementsByClassName("DraftEditor-editorContainer");
-
-        if (!textTargets || !textTargets.length) {
-            return;
-        }
-
-        Array.from(textTargets).forEach((textTarget) => {
-
-            const closestTextTarget = getClosestTextTarget(textTarget)
-
-            if (!closestTextTarget) {
+            if (!magicalRootTarget) {
                 return;
             }
 
-            const magicalRootId = `magical-root-${getUniqueEditorId(closestTextTarget)}`
+            const textTargets = target.getElementsByClassName("DraftEditor-editorContainer");
 
-            if (magicalRoots.has(magicalRootId)) {
-                console.info("Already has a root!")
+            if (!textTargets || !textTargets.length) {
                 return;
             }
-            magicalRoots.add(magicalRootId);
 
-            const tweetContext = getTweetContext(targetWithTwitterToolbar);
+            Array.from(textTargets).forEach((textTarget) => {
+                const closestTextTarget = getClosestTextTarget(textTarget)
 
-            const magicalRoot = document.createElement("div");
-            magicalRoot.id = magicalRootId;
-            magicalRoot.style.width = "100%";
-            magicalRootTarget.append(magicalRoot);
+                if (!closestTextTarget) {
+                    return;
+                }
 
-            const root = ReactDOM.createRoot(document.getElementById(magicalRootId)!)
-            root.render(
-                <React.StrictMode>
-                    <MagicallyTwitter target={closestTextTarget} context={tweetContext}/>
-                </React.StrictMode>
-            )
-        })
-    })
+                const magicalRootId = `magical-root-${getUniqueEditorId(closestTextTarget)}`;
+
+                if (document.getElementById(magicalRootId)) {
+                    return;
+                }
+
+                const tweetContext = getTweetContext(target);
+
+                const magicalRoot = document.createElement("div");
+                magicalRoot.id = magicalRootId;
+                magicalRoot.style.width = "100%";
+                magicalRootTarget.append(magicalRoot);
+
+                const root = ReactDOM.createRoot(document.getElementById(magicalRootId)!)
+                root.render(
+                    <React.StrictMode>
+                        <MagicallyTwitter target={closestTextTarget} context={tweetContext}/>
+                    </React.StrictMode>
+                );
+            });
+        });
+    });
 });
 
-function getTweetContext(element: Element) {
-    const tweet = element.querySelector(`[data-testid="tweet"]`)
-    const tweetText = element.querySelector(`[data-testid="tweetText"]`)
+function getTweetContext(element: Element): string {
+    const tweet = element.querySelector(`[data-testid="tweet"]`);
 
-    if (!tweet || !tweetText) {
-        return "";
+    if (!tweet && element.parentElement) {
+        return getTweetContext(element.parentElement);
     }
 
-    return tweetText.textContent || "";
+    const tweetText = tweet?.querySelector(`[data-testid="tweetText"]`);
+
+    return tweetText?.textContent || "";
 }
 
 function getClosestTextTarget(element: Element): HTMLElement | undefined {
