@@ -4,7 +4,7 @@ import {EventSourceMessage} from "@microsoft/fetch-event-source";
 import {GPTCompletionToken, lengthToToken} from "../../utils/constants";
 import {GPTRequest, GPTResponse} from "../../types/GPT";
 import useFetchEventSource from "../../hooks/useFetchEventSource";
-import {MagicalTextOption} from "../../types/Magically";
+import {MagicalTextOption, SpeechRecognitionEvent} from "../../types/Magically";
 import "./magically-toolbar-outlook.css"
 import {ChromeMessage, ChromeMessageResponse} from "../../types/Chrome";
 
@@ -39,6 +39,36 @@ const MagicallyOutlook: FC<{ target: Element }> = ({target}) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>("");
     const dataTransfer = new DataTransfer();
+
+    function speechRecognitionEvent(event: SpeechRecognitionEvent, transcript: string) {
+        switch (event) {
+            case "start":
+                target.firstElementChild!.textContent = ""
+                break;
+            case "result":
+                target.firstElementChild!.textContent = ""
+                dataTransfer.setData("text/plain", transcript);
+                target.firstElementChild!.dispatchEvent(new ClipboardEvent("paste", {
+                    clipboardData: dataTransfer,
+                    bubbles: true,
+                    cancelable: true,
+                }));
+                dataTransfer.clearData()
+                break;
+            case "final":
+                target.firstElementChild!.textContent = ""
+                dataTransfer.setData("text/plain", transcript);
+                target.firstElementChild!.dispatchEvent(new ClipboardEvent("paste", {
+                    clipboardData: dataTransfer,
+                    bubbles: true,
+                    cancelable: true,
+                }));
+                dataTransfer.clearData()
+                break;
+            default:
+                break;
+        }
+    }
 
     useEffect(() => {
         (async () => {
@@ -98,7 +128,12 @@ const MagicallyOutlook: FC<{ target: Element }> = ({target}) => {
     }
 
     return <>
-        <MagicalToolbarOutlook loading={loading} error={error} setPromptParams={setPromptParams}/>
+        <MagicalToolbarOutlook
+            loading={loading}
+            error={error}
+            setPromptParams={setPromptParams}
+            speechRecognitionEvent={speechRecognitionEvent}
+        />
     </>
 }
 

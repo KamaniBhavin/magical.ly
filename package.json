@@ -21,6 +21,7 @@
     "@types/chrome": "^0.0.206",
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.9",
+    "@types/webspeechapi": "^0.0.29",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.3",
@@ -39,6 +40,8 @@
   "dependencies": {
     "@microsoft/fetch-event-source": "^2.0.1",
     "@supabase/supabase-js": "^2.2.1",
+    "@types/lodash": "^4.14.191",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",

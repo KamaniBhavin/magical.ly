@@ -2,7 +2,9 @@ import React, {FC, useState} from "react";
 import "./magically-toolbar-outlook.css"
 import Loader from "../../components/Loader";
 import {contentLengths} from "../../utils/constants";
-import {MagicalTextOption} from "../../types/Magically";
+import {MagicalTextOption, SpeechRecognitionEvent} from "../../types/Magically";
+import useSpeechRecognition from "../../hooks/useSpeechRecognition";
+import SpeechRecognitionButton from "../../components/SpeechRecognitionButton";
 
 const outLookMoods = [
     {emoji: "😀", value: "Grinning"},
@@ -13,8 +15,6 @@ const outLookMoods = [
     {emoji: "😍", value: "Loving"},
     {emoji: "😮", value: "Surprised"},
     {emoji: "🎉", value: "Celebrating"},
-    {emoji: "🤔", value: "Thinking"},
-    {emoji: "😕", value: "Confused"},
     {emoji: "👍", value: "Agreeing"},
 ]
 
@@ -22,9 +22,16 @@ const MagicalToolbarOutlook: FC<{
     loading: boolean,
     error: string,
     setPromptParams: (type: MagicalTextOption, mood: string, length: string) => any
-}> = ({loading, error, setPromptParams}) => {
+    speechRecognitionEvent: (event: SpeechRecognitionEvent, transcript: string) => any
+}> = ({loading, error, setPromptParams, speechRecognitionEvent}) => {
     const [selectedMood, setSelectedMood] = useState("Neutral")
     const [selectedLength, setSelectedLength] = useState("Short & Sweet")
+    const {isListening, recognition} = useSpeechRecognition(speechRecognitionEvent);
+
+    function handleSpeechRecognition() {
+        speechRecognitionEvent("start", "");
+        recognition.start();
+    }
 
 
     return <div className="magical-toolbar">
@@ -77,6 +84,11 @@ const MagicalToolbarOutlook: FC<{
                         className={`magical-toolbar__option-btn magical-toolbar__secondary-btn ${loading ? "magical-toolbar__secondary-btn--disabled" : ""}`}>
                         Rephrase
                     </button>
+                    <SpeechRecognitionButton
+                        isListening={isListening}
+                        disabled={loading}
+                        onClick={handleSpeechRecognition}
+                    />
                 </>}
         </div>
 

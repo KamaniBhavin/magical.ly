@@ -4,7 +4,7 @@ import {EventSourceMessage} from "@microsoft/fetch-event-source";
 import {GPTCompletionToken, lengthToToken} from "../../utils/constants";
 import {GPTRequest, GPTResponse} from "../../types/GPT";
 import useFetchEventSource from "../../hooks/useFetchEventSource";
-import {MagicalTextOption} from "../../types/Magically";
+import {MagicalTextOption, SpeechRecognitionEvent} from "../../types/Magically";
 import "./magically-toolbar-gmail.css"
 import {ChromeMessage, ChromeMessageResponse} from "../../types/Chrome";
 
@@ -47,6 +47,24 @@ const MagicallyGmail: FC<{ target: Element }> = ({target}) => {
             }
         )()
     })
+
+    function speechRecognitionEvent(event: SpeechRecognitionEvent, transcript: string) {
+        switch (event) {
+            case "start":
+                target.textContent = "";
+                break;
+            case "result":
+                target.textContent = "";
+                target.textContent += transcript;
+                break;
+            case "final":
+                target.textContent = "";
+                target.textContent += transcript;
+                break;
+            default:
+                break;
+        }
+    }
 
     async function setPromptParams(type: MagicalTextOption, mood: string, length: string) {
         setLoading(true)
@@ -97,7 +115,12 @@ const MagicallyGmail: FC<{ target: Element }> = ({target}) => {
     }
 
     return <>
-        <MagicalToolbarGmail loading={loading} error={error} setPromptParams={setPromptParams}/>
+        <MagicalToolbarGmail
+            loading={loading}
+            error={error}
+            setPromptParams={setPromptParams}
+            speechRecognitionEvent={speechRecognitionEvent}
+        />
     </>
 }
 

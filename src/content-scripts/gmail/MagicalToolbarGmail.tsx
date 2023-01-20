@@ -2,16 +2,24 @@ import React, {FC, useState} from "react";
 import "./magically-toolbar-gmail.css"
 import Loader from "../../components/Loader";
 import {contentLengths, moods} from "../../utils/constants";
-import {MagicalTextOption} from "../../types/Magically";
+import {MagicalTextOption, SpeechRecognitionEvent} from "../../types/Magically";
+import useSpeechRecognition from "../../hooks/useSpeechRecognition";
+import SpeechRecognitionButton from "../../components/SpeechRecognitionButton";
 
 const MagicalToolbarGmail: FC<{
     loading: boolean,
     error: string,
     setPromptParams: (type: MagicalTextOption, mood: string, length: string) => any
-}> = ({loading, error, setPromptParams}) => {
+    speechRecognitionEvent: (event: SpeechRecognitionEvent, transcript: string) => any
+}> = ({loading, error, setPromptParams, speechRecognitionEvent}) => {
     const [selectedMood, setSelectedMood] = useState("Neutral")
     const [selectedLength, setSelectedLength] = useState("Short & Sweet")
+    const {isListening, recognition} = useSpeechRecognition(speechRecognitionEvent);
 
+    function handleSpeechRecognition() {
+        speechRecognitionEvent("start", "");
+        recognition.start();
+    }
 
     return <div className="magical-toolbar">
         <div className="magical-toolbar__section">
@@ -57,12 +65,11 @@ const MagicalToolbarGmail: FC<{
                         className={`magical-toolbar__option-btn magical-toolbar__primary-btn ${loading ? "magical-toolbar__primary-btn--disabled" : ""}`}>
                         Write
                     </button>
-                    <button
+                    <SpeechRecognitionButton
                         disabled={loading}
-                        onClick={() => setPromptParams("rephrase", selectedMood, selectedLength)}
-                        className={`magical-toolbar__option-btn magical-toolbar__secondary-btn ${loading ? "magical-toolbar__secondary-btn--disabled" : ""}`}>
-                        Rephrase
-                    </button>
+                        onClick={handleSpeechRecognition}
+                        isListening={isListening}
+                    />
                 </>}
         </div>
 
