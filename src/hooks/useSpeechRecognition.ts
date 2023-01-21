@@ -34,10 +34,12 @@ function useSpeechRecognition(
     }
 
     recognition.onnomatch = function () {
+        recognition.stop();
         console.error("Speech recognition could not understand what you said.")
     }
 
     recognition.onerror = function (event) {
+        recognition.stop();
         console.error(`Speech recognition error occurred: ${event.error}`)
     }
 

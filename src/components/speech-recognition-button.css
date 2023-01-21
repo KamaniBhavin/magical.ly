@@ -10,6 +10,24 @@
     color: #ff003b;
 }
 
+.speech-recognition-button__tooltip {
+    color: white;
+    visibility: hidden;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.50);
+    font-size: 0.75rem;
+    padding: 0.5em;
+    top: -5rem;
+    z-index: 999;
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+}
+
+.speech-recognition-button:hover .speech-recognition-button__tooltip {
+    cursor: pointer;
+    visibility: visible;
+}
+
 .speech-recognition-button__strip {
     height: 0.5rem;
     width: 0.1rem;

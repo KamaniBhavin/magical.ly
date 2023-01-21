@@ -12,6 +12,7 @@ const SpeechRecognitionButton: FC<{
         disabled={disabled}
         onClick={() => onClick()}
         className="speech-recognition-button">
+        <span className="speech-recognition-button__tooltip">Speech recognition is only supported by Google chrome.</span>
         {
             isListening
                 ? _.times(Math.max(Math.random() * 20, 15), (i) => {
