@@ -9,17 +9,7 @@ import "./magically-toolbar-outlook.css"
 import {ChromeMessage, ChromeMessageResponse} from "../../types/Chrome";
 
 function createGPTRequestBody(type: MagicalTextOption, target: Element, mood: string, length: string): GPTRequest {
-    let promptForGPT, promptPrefix;
-
-    /**
-     * Similar to `gmail-quote` but for Outlook.
-     * This is a bit hacky but it works.
-     **/
-    if (target.nextElementSibling) {
-        promptPrefix = `Write an reply for ${target.nextElementSibling.textContent}`;
-    } else {
-        promptPrefix = target.textContent;
-    }
+    let promptForGPT, promptPrefix = target.textContent;
 
     if (type == "write") {
         promptForGPT = `${promptPrefix}. It should sound like ${mood} and keep it ${length} in length. Do not write subject of the mail.`
