@@ -25,8 +25,6 @@ const Home: FC = () => {
                             <h3>Authorized by <span><FcGoogle/></span></h3>
                             <div className="home">
                                 <div className="profile__text--lrg">{user.email}</div>
-                                <h3>Credits left:</h3>
-                                <div className="profile__text--lrg">{user.tokens}</div>
                             </div>
                         </div>
                     </div>

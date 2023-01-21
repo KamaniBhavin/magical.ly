@@ -35,14 +35,10 @@ const MagicallyGmail: FC<{ target: Element }> = ({target}) => {
 
     useEffect(() => {
         (async () => {
-                const {userId, tokens} = await chrome.storage.sync.get(["userId", "tokens"]);
+                const {userId} = await chrome.storage.sync.get(["userId"]);
 
                 if (!userId) {
                     setError("Please login!");
-                } else if (!tokens || tokens < 1) {
-                    setError("Not enough tokens!");
-                } else {
-                    setError("");
                 }
             }
         )()
